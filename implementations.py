@@ -11,12 +11,15 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
     loss = float('inf')
     for n_iter in range(max_iters):
         gradient = compute_gradient_mse(y,tx,w)
+        print(gradient)
         loss = compute_mse(y,tx,w)
+        print(loss)
         w = w - gamma*gradient
         ws.append(w)
+        print(w)
         losses.append(loss)
 
-    return loss, w
+    return w, loss
 
 
 def least_squares_SDG(y, tx, initial_w, max_iters, gamma):
@@ -52,7 +55,7 @@ def least_squares(y,tx):
 
 
 def ridge_regression(y, tx, lambda_):
-    w = np.linalg.inv(tx.T@tx + (lambda_*2*tx.shape[0])*np.identity(tx.shape[1]))@(tx.T@y)
+    w = np.linalg.inv(tx.T@tx + (lambda_*2.0*float(tx.shape[0]))*np.identity(tx.shape[1]))@(tx.T@y)
     #w = np.linalg.inv(tx@tx.T + lambda_*np.identity(tx.shape[1]))@tx@y
     e = compute_mse(y, tx, w)
     return w, e
@@ -75,7 +78,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2] < threshold):
             break
     loss = calculate_loss(y, tx, w)
-    return loss, w
+    return w, loss
 
 """
 Regularized logistic regression using gradient descent
@@ -87,14 +90,15 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
     losses = []
     threshold = 1e-8
     for i in range(max_iters):
-        loss = calculate_loss(y, tx, w) + (lambda_/2)*(w@w.T)
-        losses.append(loss)
-        g = compute_gradient_likelihood(y, tx, w)
-        w = w - gamma*g
-        if len(losses) > 1 and np.abs(losses[-1]- losses[-2] < threshold):
-            break
+        for minbatch_y, minbatch_x in batch_iter(y,tx, 1):
+            loss = calculate_loss(minbatch_y, minbatch_x, w) + (lambda_/2)*(w@w.T)
+            losses.append(loss)
+            g = compute_gradient_likelihood(minbatch_y, minbatch_x, w) + lambda_ * w
+            w = w - gamma*g
+            if len(losses) > 1 and np.abs(losses[-1]- losses[-2] < threshold):
+                break
 
-    return loss, w
+    return w,loss
 
 """
 Newton's method for logistic regression
@@ -108,10 +112,10 @@ def new_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
     for i in range(max_iters):
         loss = calculate_loss(y, tx, w)
         losses.append(loss)
-        g = compute_gradient_likelihood(y, tx, w)
+        g = compute_gradient_likelihood(y, tx, w) + lambda_ * w
         hes = calculate_hessian(y, tx, w)
         w = w-gamma*np.linalg.inv(hes)@g
         if len(losses) > 1 and np.abs(losses[-1]- losses[-2] < threshold):
             break
     loss = calculate_loss(y, tx, w)
-    return loss, w
+    return w,loss

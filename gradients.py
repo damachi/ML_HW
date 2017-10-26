@@ -13,5 +13,7 @@ def compute_gradient_likelihood(y, tx, w):
 
 
 def calculate_hessian(y, tx, w):
+
     S = np.diag((sigmoid(tx@w)*(1-sigmoid(tx@w))).T[0])
+
     return tx.T@S@tx
