@@ -18,7 +18,7 @@ $ python3 run.py
 ## Folder organization
 
 ### - cost.py
-	Contains the costs functions methods:
+	Contains the cost functions methods:
 		compute_mse(y, tx, w)
 		calculate_loss(y, tx, w, lambda_=0)
 
@@ -64,4 +64,7 @@ $ python3 run.py
 	Contains the main function:
 		run()
 
-For complementary informations about the methods check the DocStrings
+## Additional notes
+
+For complementary informations about the methods check the DocStrings.
+And for comprehensive information about the detailed thinking behind this code check this project report
