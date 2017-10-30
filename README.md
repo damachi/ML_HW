@@ -1,21 +1,21 @@
-#Classify Higgs Boson using Machine Learning
+# Classify Higgs Boson using Machine Learning
 
 The "run.py" allow user to classify the Higgs boson based on its decay signature.
 The program create a file "prediction_1.csv" representing the prediction of the test dataset, ready to be submitted on kaggle.
 
-##Installation
+## Installation
 
 The machine that will run "run.py" should have installed:
 		- python3 https://www.python.org/downloads/
 		- the numpy library  http://www.numpy.org/
 
-##Running the code
+## Running the code
 
 Run the following command in your terminal inside the folder Higgs_Boson:
 
 $ python3 run.py
 
-##Folder organization
+## Folder organization
 
 ### - cost.py
 	Contains the costs functions methods:
